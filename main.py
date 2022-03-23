@@ -66,7 +66,7 @@ def search_gitlab_repo(wf, query):
 
     # update gitlab api data
     if not wf.cached_data_fresh('gitlab_projects', max_age=3600) and not is_running('gitlab_update'):
-        cmd = ['/usr/bin/python', wf.workflowfile('gitlab.py')]
+        cmd = ['/usr/local/bin/python', wf.workflowfile('gitlab.py')]
         run_in_background('gitlab_update', cmd)
         wf.rerun = 0.
 
@@ -165,9 +165,9 @@ def main(wf):
         open_gitlab_todo(wf)
         return 0
 
-    if args.repo:
-        search_gitlab_repo(wf, args.repo)
-        return 0
+    # if args.repo:
+    #     search_gitlab_repo(wf, args.repo)
+    #     return 0
 
     if args.issue:
         query_gitlab_issue(wf, args.issue)
@@ -176,6 +176,8 @@ def main(wf):
     if args.merge:
         get_gitlab_mr_assigned(wf)
         return 0
+    
+    search_gitlab_repo(wf, args.repo)
 
 
 if __name__ == u"__main__":
